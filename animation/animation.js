@@ -62,7 +62,7 @@ var Body = (function () {
             this.vy = -BOUNCE * this.vy;
         }
         //TODO： 左右越界反弹
-        if (this.x + this.width > BOUNDS_RIGHT) {
+        if (this.x + this.width > BOUNDS_RIGHT && this.vx > 0) {
             this.vx = -BOUNCE * this.vx;
         }
         if (this.x < BOUNDS_LEFT) {
@@ -82,15 +82,24 @@ var rect = new Rect();
 rect.width = 150;
 rect.height = 100;
 rect.color = '#FF0000';
+var rect2 = new Rect();
+rect2.width = 150;
+rect2.height = 100;
+rect2.color = '#000000';
 /**
  * 创建一个物体，其显示内容为一个长方形，受重力做平抛运动
  */
 var body = new Body(rect);
 body.width = rect.width;
 body.height = rect.height;
-body.vx = 5; //需要保证 vx 在 0-50的范围内行为正常
-body.vy = 0; //需要保证 vy 在 0-50的范围内行为正常
+body.vx = 50; //需要保证 vx 在 0-50的范围内行为正常
+body.vy = 50; //需要保证 vy 在 0-50的范围内行为正常
+var body2 = new Body(rect2);
+body2.width = rect.width;
+body2.height = rect.height;
+body2.vx = 5; //需要保证 vx 在 0-50的范围内行为正常
+body2.vy = 0;
 var renderCore = new RenderCore();
 var ticker = new Ticker();
-renderCore.start([rect]);
-ticker.start([body]);
+renderCore.start([rect, rect2]);
+ticker.start([body, body2]);
