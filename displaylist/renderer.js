@@ -31,8 +31,17 @@ var render;
             }
             else {
                 //TODO:
-                // GLOBAL_MATRIX = PARENT_GLOBAL_MATRIX * LOCAL_MATRIX
-                this.globalMatrix = localMatrix;
+                // GLOBAL_MATRIX = LOCAL_MATRIX * PARENT_GLOBAL_MATRIX           
+                var result = new render.Matrix();
+                var m1 = localMatrix;
+                var m2 = parent.globalMatrix;
+                result.a = m1.a * m2.a + m1.b * m2.c;
+                result.b = m1.a * m2.b + m1.b * m2.d;
+                result.c = m2.a * m1.c + m2.c * m1.d;
+                result.d = m2.b * m1.c + m1.d * m2.d;
+                result.tx = m2.a * m1.tx + m2.c * m1.ty + m2.tx;
+                result.ty = m2.b * m1.tx + m2.d * m1.ty + m2.ty;
+                this.globalMatrix = result;
             }
             context.setTransform(this.globalMatrix.a, this.globalMatrix.b, this.globalMatrix.c, this.globalMatrix.d, this.globalMatrix.tx, this.globalMatrix.ty);
             this.render(context);
