@@ -74,39 +74,38 @@ ticker.start([body]);
 
 
 var eventCore = new events.EventCore();
-//var eventCore2 = new events.EventCore();
 eventCore.init();
-//eventCore2.init();
+
 
 var clickhead = 0;
 var clickleg = 0;
 var headHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
     alert (`点击位置为${localPoint.x},${localPoint.y}`);
-    
+    var chead = false;
     if(localPoint.x > 0 && localPoint.x < 100 && localPoint.y > 0 && localPoint.y < 100){
+        chead = true;
         clickhead = 1;
     }
     
-    if((localPoint.x > 50 && localPoint.x < 100 && localPoint.y > 210 && localPoint.y < 270 )||(localPoint.x > 100 && localPoint.x < 150 && localPoint.y > 210 && localPoint.y < 270)){
-        clickleg = 1;
-    }
 
-    return true;
+    return chead;
 }
-/*var legHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
+var legHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
     alert (`点击位置为${localPoint.x},${localPoint.y}`);
-   
-    if((localPoint.x > 50 && localPoint.x < 100 && localPoint.y > 210 && localPoint.y < 270 )||(localPoint.x > 100 && localPoint.x < 150 && localPoint.y > 210 && localPoint.y < 270)){
+    var cleg = false;
+    if((localPoint.x > 0 && localPoint.x < 50 && localPoint.y > 0 && localPoint.y < 60 )||(localPoint.x > 50 && localPoint.x < 100 && localPoint.y > 0 && localPoint.y < 60)){
+        cleg = true;
         clickleg = 1;
+
     }
-    return true;
-}*/
+    return cleg;
+}
 
 var headOnClick = () => {
-    alert("clicked!!");
+    //alert("clicked!!");
     //修改 HumanBody 的速度，使其反向移动
-    /*if(clickhead==1){
-        if(clickleg==1){
+    if(headHitTest){
+        if(legHitTest){
             body.vx = 2;
             body.vr = 1;
         }else{
@@ -114,56 +113,28 @@ var headOnClick = () => {
             body.vr *=-1;
         }
     }
-    
-    if(clickleg==1){
-        if(clickhead==1){
-            clickhead=1;
-        }
-        body.vx=0;
-        body.vr=0;
-        body.rotation=0;
 
-    }*/
-    if(clickhead == 1){
-        body.vx *= -1;
-        body.vr *= -1;
-        clickhead = 2;
-    }
+    console.log(clickhead);
+    console.log(clickleg);
     
-    if(clickleg == 1){
+}
+var legOnClick = () => {
+    //alert("clicked");
+    
+    if(legHitTest){
         body.vx = 0;
         body.vr = 0;
         body.rotation = 0;
 
     }
 
-   if(clickleg == 1 && clickhead == 2 ){
-       body.vx = 2;
-       body.vr = Math.PI/5;
-       clickhead = 0;
-       clickleg = 0;
-   }
-
-    
     console.log(clickhead);
     console.log(clickleg);
     
 }
-/*var legOnClick = () => {
-    //alert("clicked");
-    
-    if(clickleg==1){
-        body.vx=0;
-        body.vr=0;
-        body.rotation=0;
-    }
-    
-    console.log(clickleg);
-    
-}*/
-
+eventCore.register(Lleg,legHitTest,legOnClick);
 eventCore.register(head,headHitTest,headOnClick);
-eventCore.register(Lleg,headHitTest,headOnClick);
+
 
 
 
